@@ -13,6 +13,7 @@ Guidelines:
 3. Include necessary joins, filters, and aggregations based on the schema and question.
 4. Do not assume any additional context beyond the provided schema and question.
 5. Respond with only the SQL query, without any explanation or comments.
+6. When dropping a view, always use "DROP VIEW IF EXISTS view_name;" instead of "DROP TABLE".
 
 Output:
 Provide the SQL query as plain text, ready to be executed.

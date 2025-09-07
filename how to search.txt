@@ -1,0 +1,12 @@
+show me WAREHOUSE details in City 1
+show me addresses
+show me addresses where pincode is 560005
+show me audit_events
+show me audit_events where entity is shipments and entity id is 24
+create a vwc top of order_items table where disccount is morethan 20 is create v_top_order_items
+create a vwc_test1 top of order_items table where disccount is morethan 20 vwc_test1 
+create a vwc_test10  top of order_items table where disccount is equalto 20 and it should select customer details, quantity, discount
+Create a new view with only the columns order_item_id, customer_id, from the original view vwc_test10
+delete vwc_test10
+
+https://neon.com/?gad_source=1&gad_campaignid=21329093217&gbraid=0AAAAAqiR81rO5Gd59a7WvLJtDWmKPc_fX&gclid=CjwKCAjw2vTFBhAuEiwAFaScwpkn8dKZg_a-HsmKyqMCd9FympbFMVfpFx-SD2fIDcR5i9YfLgvw-xoCn3gQAvD_BwE

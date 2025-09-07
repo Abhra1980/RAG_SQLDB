@@ -277,3 +277,164 @@ JOIN
 JOIN 
     public.products p ON ci.product_id = p.product_id;]
 (Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-07 14:41:57,210 - INFO - Environment variables loaded.
+2025-09-07 14:42:02,704 - INFO - Creating database engine...
+2025-09-07 14:42:02,792 - INFO - Introspecting database schema...
+2025-09-07 14:42:13,516 - INFO - Schema introspection completed.
+2025-09-07 14:42:13,518 - INFO - Loading prompt template from prompt_template.txt...
+2025-09-07 14:42:13,519 - INFO - Prompt template loaded successfully.
+2025-09-07 14:42:13,520 - INFO - 
+==== Prompt sent to EURI ====
+
+2025-09-07 14:42:13,521 - INFO - You are an advanced SQL assistant with expertise in PostgreSQL. 
+Your task is to translate the following natural language query into a valid and optimized SQL query.
+
+Schema:
+SCHEMA: public
+TABLE abh_test: order_id bigint, order_date date, customer_id bigint, full_name text, paid_amount numeric, paid_at timestamp with time zone, warehouse_id bigint, shipped_at timestamp with time zone, tracking_no text
+TABLE abhra: t1 text, t2 text, t3 text
+TABLE addresses: address_id bigint, customer_id bigint, line1 text, city text, state text, country text, postal_code text, is_default boolean
+TABLE audit_events: event_id bigint, event_type text, entity text, entity_id bigint, created_at timestamp with time zone, payload jsonb
+TABLE cart_items: cart_item_id bigint, cart_id bigint, product_id bigint, quantity integer
+TABLE carts: cart_id bigint, customer_id bigint, created_at timestamp with time zone, updated_at timestamp with time zone
+TABLE categories: category_id bigint, name text, parent_category_id bigint
+TABLE coupon_redemptions: redemption_id bigint, coupon_id bigint, order_id bigint, redeemed_at timestamp with time zone
+TABLE coupons: coupon_id bigint, code text, description text, pct_off numeric, amount_off numeric, active boolean, valid_from date, valid_to date
+TABLE customers: customer_id bigint, full_name text, email text, phone text, created_at timestamp with time zone, status USER-DEFINED
+TABLE gift_cards: gift_card_id bigint, code text, balance numeric, active boolean, created_at timestamp with time zone
+TABLE inventory: warehouse_id bigint, product_id bigint, quantity integer
+TABLE loyalty_accounts: account_id bigint, customer_id bigint, created_at timestamp with time zone
+TABLE loyalty_ledger: ledger_id bigint, account_id bigint, points_delta integer, reason text, created_at timestamp with time zone
+TABLE order_items: order_item_id bigint, order_id bigint, product_id bigint, quantity integer, unit_price numeric, discount numeric
+TABLE orders: order_id bigint, cust
+...
+
+2025-09-07 14:42:13,521 - INFO - Calling EURI to generate SQL...
+2025-09-07 14:42:13,523 - INFO - Calling EURI API...
+2025-09-07 14:42:15,811 - INFO - EURI API call successful.
+2025-09-07 14:42:15,814 - INFO - 
+==== Generated SQL ====
+
+2025-09-07 14:42:15,814 - INFO - SELECT
+    ci.cart_item_id,
+    ci.cart_id,
+    ci.product_id,
+    ci.quantity
+FROM
+    public.cart_items ci;
+2025-09-07 14:42:15,815 - INFO - Running SQL...
+2025-09-07 14:42:15,816 - INFO - Executing SQL query...
+2025-09-07 14:42:18,748 - INFO - SQL query executed successfully.
+2025-09-07 14:42:18,749 - INFO - Returned 6000 rows Ã— 4 columns.
+2025-09-07 14:46:15,781 - INFO - generated new fontManager
+2025-09-07 14:46:16,022 - WARNING - Failed to import geometry msgs in rigid_transformations.py.
+2025-09-07 14:46:16,023 - WARNING - Failed to import ros dependencies in rigid_transforms.py
+2025-09-07 14:46:16,023 - WARNING - autolab_core not installed as catkin package, RigidTransform ros methods will be unavailable
+2025-09-07 14:47:34,665 - INFO - No OpenGL_accelerate module loaded: No module named 'OpenGL_accelerate'
+2025-09-07 16:46:48,588 - INFO - Creating database engine...
+2025-09-07 16:46:48,626 - INFO - Introspecting database schema...
+2025-09-07 16:46:55,359 - INFO - Schema introspection completed.
+2025-09-07 16:47:12,760 - INFO - Loading prompt template from prompt_template.txt...
+2025-09-07 16:47:12,760 - INFO - Prompt template loaded successfully.
+2025-09-07 16:47:12,760 - INFO - 
+==== Prompt sent to EURI ====
+
+2025-09-07 16:47:12,760 - INFO - You are an advanced SQL assistant with expertise in PostgreSQL. 
+Your task is to translate the following natural language query into a valid and optimized SQL query.
+
+Schema:
+SCHEMA: public
+TABLE abh_test: order_id bigint, order_date date, customer_id bigint, full_name text, paid_amount numeric, paid_at timestamp with time zone, warehouse_id bigint, shipped_at timestamp with time zone, tracking_no text
+TABLE abhra: t1 text, t2 text, t3 text
+TABLE addresses: address_id bigint, customer_id bigint, line1 text, city text, state text, country text, postal_code text, is_default boolean
+TABLE audit_events: event_id bigint, event_type text, entity text, entity_id bigint, created_at timestamp with time zone, payload jsonb
+TABLE cart_items: cart_item_id bigint, cart_id bigint, product_id bigint, quantity integer
+TABLE carts: cart_id bigint, customer_id bigint, created_at timestamp with time zone, updated_at timestamp with time zone
+TABLE categories: category_id bigint, name text, parent_category_id bigint
+TABLE coupon_redemptions: redemption_id bigint, coupon_id bigint, order_id bigint, redeemed_at timestamp with time zone
+TABLE coupons: coupon_id bigint, code text, description text, pct_off numeric, amount_off numeric, active boolean, valid_from date, valid_to date
+TABLE customers: customer_id bigint, full_name text, email text, phone text, created_at timestamp with time zone, status USER-DEFINED
+TABLE gift_cards: gift_card_id bigint, code text, balance numeric, active boolean, created_at timestamp with time zone
+TABLE inventory: warehouse_id bigint, product_id bigint, quantity integer
+TABLE loyalty_accounts: account_id bigint, customer_id bigint, created_at timestamp with time zone
+TABLE loyalty_ledger: ledger_id bigint, account_id bigint, points_delta integer, reason text, created_at timestamp with time zone
+TABLE order_items: order_item_id bigint, order_id bigint, product_id bigint, quantity integer, unit_price numeric, discount numeric
+TABLE orders: order_id bigint, cust
+...
+
+2025-09-07 16:47:12,760 - INFO - Calling EURI to generate SQL...
+2025-09-07 16:47:12,760 - INFO - Calling EURI API...
+2025-09-07 16:47:16,321 - INFO - EURI API call successful.
+2025-09-07 16:47:16,321 - INFO - 
+==== Generated SQL ====
+
+2025-09-07 16:47:16,321 - INFO - SELECT
+  ci.cart_item_id,
+  ci.cart_id,
+  ci.product_id,
+  ci.quantity,
+  p.sku,
+  p.name AS product_name,
+  p.price,
+  p.discontinued,
+  pi.url AS primary_image_url
+FROM
+  public.cart_items ci
+JOIN
+  public.products p ON ci.product_id = p.product_id
+LEFT JOIN
+  (
+    SELECT
+      product_id,
+      url
+    FROM
+      public.product_images
+    WHERE
+      is_primary = TRUE
+  ) pi ON ci.product_id = pi.product_id;
+2025-09-07 16:47:16,321 - INFO - Running SQL...
+2025-09-07 16:47:16,321 - INFO - Executing SQL query...
+2025-09-07 16:47:19,341 - INFO - SQL query executed successfully.
+2025-09-07 16:47:19,341 - INFO - Returned 7200 rows × 9 columns.
+2025-09-07 16:47:44,678 - INFO - Creating database engine...
+2025-09-07 16:47:44,722 - INFO - Introspecting database schema...
+2025-09-07 16:47:51,367 - INFO - Schema introspection completed.
+2025-09-07 16:47:57,206 - INFO - Loading prompt template from prompt_template.txt...
+2025-09-07 16:47:57,206 - INFO - Prompt template loaded successfully.
+2025-09-07 16:47:57,206 - INFO - 
+==== Prompt sent to EURI ====
+
+2025-09-07 16:47:57,206 - INFO - You are an advanced SQL assistant with expertise in PostgreSQL. 
+Your task is to translate the following natural language query into a valid and optimized SQL query.
+
+Schema:
+SCHEMA: public
+TABLE abh_test: order_id bigint, order_date date, customer_id bigint, full_name text, paid_amount numeric, paid_at timestamp with time zone, warehouse_id bigint, shipped_at timestamp with time zone, tracking_no text
+TABLE abhra: t1 text, t2 text, t3 text
+TABLE addresses: address_id bigint, customer_id bigint, line1 text, city text, state text, country text, postal_code text, is_default boolean
+TABLE audit_events: event_id bigint, event_type text, entity text, entity_id bigint, created_at timestamp with time zone, payload jsonb
+TABLE cart_items: cart_item_id bigint, cart_id bigint, product_id bigint, quantity integer
+TABLE carts: cart_id bigint, customer_id bigint, created_at timestamp with time zone, updated_at timestamp with time zone
+TABLE categories: category_id bigint, name text, parent_category_id bigint
+TABLE coupon_redemptions: redemption_id bigint, coupon_id bigint, order_id bigint, redeemed_at timestamp with time zone
+TABLE coupons: coupon_id bigint, code text, description text, pct_off numeric, amount_off numeric, active boolean, valid_from date, valid_to date
+TABLE customers: customer_id bigint, full_name text, email text, phone text, created_at timestamp with time zone, status USER-DEFINED
+TABLE gift_cards: gift_card_id bigint, code text, balance numeric, active boolean, created_at timestamp with time zone
+TABLE inventory: warehouse_id bigint, product_id bigint, quantity integer
+TABLE loyalty_accounts: account_id bigint, customer_id bigint, created_at timestamp with time zone
+TABLE loyalty_ledger: ledger_id bigint, account_id bigint, points_delta integer, reason text, created_at timestamp with time zone
+TABLE order_items: order_item_id bigint, order_id bigint, product_id bigint, quantity integer, unit_price numeric, discount numeric
+TABLE orders: order_id bigint, cust
+...
+
+2025-09-07 16:47:57,206 - INFO - Calling EURI to generate SQL...
+2025-09-07 16:47:57,206 - INFO - Calling EURI API...
+2025-09-07 16:47:59,627 - INFO - EURI API call successful.
+2025-09-07 16:47:59,627 - INFO - 
+==== Generated SQL ====
+
+2025-09-07 16:47:59,627 - INFO - SELECT * FROM public.abh_test;
+2025-09-07 16:47:59,627 - INFO - Running SQL...
+2025-09-07 16:47:59,627 - INFO - Executing SQL query...
+2025-09-07 16:48:01,580 - INFO - SQL query executed successfully.
+2025-09-07 16:48:01,580 - INFO - Returned 1000 rows × 9 columns.
