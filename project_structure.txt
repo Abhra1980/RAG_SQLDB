@@ -1,0 +1,15 @@
+SQL_Project/
+│
+├── src/                     # Source code folder
+│   ├── main.py              # Entry point for the application
+│   ├── config.py            # Configuration and environment variable loading
+│   ├── db_utils.py          # Database-related utilities (e.g., schema introspection, SQL execution)
+│   ├── prompt_utils.py      # Prompt-related utilities (e.g., loading templates, formatting prompts)
+│   ├── euri_api.py          # Functions for interacting with the EURI API
+│   ├── logger.py            # Logging configuration
+│
+├── prompt_template.txt      # Prompt template file
+├── requirements.txt         # Dependencies for the project
+├── .env                     # Environment variables (e.g., DATABASE_URI, API keys)
+├── pipeline.log             # Log file for the pipeline
+└── README.md                # Documentation for the project

@@ -1,0 +1,279 @@
+2025-09-06 17:53:14,441 - INFO - Environment variables loaded.
+2025-09-06 17:53:14,491 - INFO - Creating database engine...
+2025-09-06 17:53:14,493 - INFO - Introspecting database schema...
+2025-09-06 17:53:22,088 - INFO - Schema introspection completed.
+2025-09-06 17:53:22,088 - INFO - Loading prompt template from prompt_template.txt...
+2025-09-06 17:53:22,088 - INFO - Prompt template loaded successfully.
+2025-09-06 17:53:22,088 - INFO - 
+==== Prompt sent to EURI ====
+
+2025-09-06 17:53:22,088 - INFO - You are an advanced SQL assistant with expertise in PostgreSQL. 
+Your task is to translate the following natural language query into a valid and optimized SQL query.
+
+Schema:
+SCHEMA: public
+TABLE abh_test: order_id bigint, order_date date, customer_id bigint, full_name text, paid_amount numeric, paid_at timestamp with time zone, warehouse_id bigint, shipped_at timestamp with time zone, tracking_no text
+TABLE abhra: t1 text, t2 text, t3 text
+TABLE addresses: address_id bigint, customer_id bigint, line1 text, city text, state text, country text, postal_code text, is_default boolean
+TABLE audit_events: event_id bigint, event_type text, entity text, entity_id bigint, created_at timestamp with time zone, payload jsonb
+TABLE cart_items: cart_item_id bigint, cart_id bigint, product_id bigint, quantity integer
+TABLE carts: cart_id bigint, customer_id bigint, created_at timestamp with time zone, updated_at timestamp with time zone
+TABLE categories: category_id bigint, name text, parent_category_id bigint
+TABLE coupon_redemptions: redemption_id bigint, coupon_id bigint, order_id bigint, redeemed_at timestamp with time zone
+TABLE coupons: coupon_id bigint, code text, description text, pct_off numeric, amount_off numeric, active boolean, valid_from date, valid_to date
+TABLE customers: customer_id bigint, full_name text, email text, phone text, created_at timestamp with time zone, status USER-DEFINED
+TABLE gift_cards: gift_card_id bigint, code text, balance numeric, active boolean, created_at timestamp with time zone
+TABLE inventory: warehouse_id bigint, product_id bigint, quantity integer
+TABLE loyalty_accounts: account_id bigint, customer_id bigint, created_at timestamp with time zone
+TABLE loyalty_ledger: ledger_id bigint, account_id bigint, points_delta integer, reason text, created_at timestamp with time zone
+TABLE order_items: order_item_id bigint, order_id bigint, product_id bigint, quantity integer, unit_price numeric, discount numeric
+TABLE orders: order_id bigint, cust
+...
+
+2025-09-06 17:53:22,088 - INFO - Calling EURI to generate SQL...
+2025-09-06 17:53:22,088 - INFO - Calling EURI API...
+2025-09-06 17:53:24,679 - INFO - EURI API call successful.
+2025-09-06 17:53:24,695 - INFO - 
+==== Generated SQL ====
+
+2025-09-06 17:53:24,695 - INFO - SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'public';
+2025-09-06 17:53:24,695 - INFO - Running SQL...
+2025-09-06 17:53:24,695 - INFO - Executing SQL query...
+2025-09-06 17:53:25,772 - INFO - SQL query executed successfully.
+2025-09-06 17:53:25,773 - INFO - Returned 47 rows × 1 columns.
+2025-09-06 17:54:38,082 - INFO - Environment variables loaded.
+2025-09-06 17:54:45,991 - INFO - Creating database engine...
+2025-09-06 17:54:46,095 - INFO - Introspecting database schema...
+2025-09-06 17:54:58,438 - INFO - Schema introspection completed.
+2025-09-06 17:54:58,452 - INFO - Loading prompt template from prompt_template.txt...
+2025-09-06 17:54:58,454 - INFO - Prompt template loaded successfully.
+2025-09-06 17:54:58,455 - INFO - 
+==== Prompt sent to EURI ====
+
+2025-09-06 17:54:58,456 - INFO - You are an advanced SQL assistant with expertise in PostgreSQL. 
+Your task is to translate the following natural language query into a valid and optimized SQL query.
+
+Schema:
+SCHEMA: public
+TABLE abh_test: order_id bigint, order_date date, customer_id bigint, full_name text, paid_amount numeric, paid_at timestamp with time zone, warehouse_id bigint, shipped_at timestamp with time zone, tracking_no text
+TABLE abhra: t1 text, t2 text, t3 text
+TABLE addresses: address_id bigint, customer_id bigint, line1 text, city text, state text, country text, postal_code text, is_default boolean
+TABLE audit_events: event_id bigint, event_type text, entity text, entity_id bigint, created_at timestamp with time zone, payload jsonb
+TABLE cart_items: cart_item_id bigint, cart_id bigint, product_id bigint, quantity integer
+TABLE carts: cart_id bigint, customer_id bigint, created_at timestamp with time zone, updated_at timestamp with time zone
+TABLE categories: category_id bigint, name text, parent_category_id bigint
+TABLE coupon_redemptions: redemption_id bigint, coupon_id bigint, order_id bigint, redeemed_at timestamp with time zone
+TABLE coupons: coupon_id bigint, code text, description text, pct_off numeric, amount_off numeric, active boolean, valid_from date, valid_to date
+TABLE customers: customer_id bigint, full_name text, email text, phone text, created_at timestamp with time zone, status USER-DEFINED
+TABLE gift_cards: gift_card_id bigint, code text, balance numeric, active boolean, created_at timestamp with time zone
+TABLE inventory: warehouse_id bigint, product_id bigint, quantity integer
+TABLE loyalty_accounts: account_id bigint, customer_id bigint, created_at timestamp with time zone
+TABLE loyalty_ledger: ledger_id bigint, account_id bigint, points_delta integer, reason text, created_at timestamp with time zone
+TABLE order_items: order_item_id bigint, order_id bigint, product_id bigint, quantity integer, unit_price numeric, discount numeric
+TABLE orders: order_id bigint, cust
+...
+
+2025-09-06 17:54:58,457 - INFO - Calling EURI to generate SQL...
+2025-09-06 17:54:58,459 - INFO - Calling EURI API...
+2025-09-06 17:55:14,377 - ERROR - EURI API call failed: HTTPSConnectionPool(host='api.euron.one', port=443): Max retries exceeded with url: /api/v1/euri/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1017)')))
+2025-09-06 17:55:14,377 - ERROR - Pipeline failed: HTTPSConnectionPool(host='api.euron.one', port=443): Max retries exceeded with url: /api/v1/euri/chat/completions (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1017)')))
+2025-09-06 17:59:00,921 - INFO - Environment variables loaded.
+2025-09-06 17:59:10,095 - INFO - Creating database engine...
+2025-09-06 17:59:10,098 - INFO - Introspecting database schema...
+2025-09-06 17:59:20,279 - INFO - Schema introspection completed.
+2025-09-06 17:59:20,281 - INFO - Loading prompt template from prompt_template.txt...
+2025-09-06 17:59:20,282 - INFO - Prompt template loaded successfully.
+2025-09-06 17:59:20,284 - INFO - 
+==== Prompt sent to EURI ====
+
+2025-09-06 17:59:20,284 - INFO - You are an advanced SQL assistant with expertise in PostgreSQL. 
+Your task is to translate the following natural language query into a valid and optimized SQL query.
+
+Schema:
+SCHEMA: public
+TABLE abh_test: order_id bigint, order_date date, customer_id bigint, full_name text, paid_amount numeric, paid_at timestamp with time zone, warehouse_id bigint, shipped_at timestamp with time zone, tracking_no text
+TABLE abhra: t1 text, t2 text, t3 text
+TABLE addresses: address_id bigint, customer_id bigint, line1 text, city text, state text, country text, postal_code text, is_default boolean
+TABLE audit_events: event_id bigint, event_type text, entity text, entity_id bigint, created_at timestamp with time zone, payload jsonb
+TABLE cart_items: cart_item_id bigint, cart_id bigint, product_id bigint, quantity integer
+TABLE carts: cart_id bigint, customer_id bigint, created_at timestamp with time zone, updated_at timestamp with time zone
+TABLE categories: category_id bigint, name text, parent_category_id bigint
+TABLE coupon_redemptions: redemption_id bigint, coupon_id bigint, order_id bigint, redeemed_at timestamp with time zone
+TABLE coupons: coupon_id bigint, code text, description text, pct_off numeric, amount_off numeric, active boolean, valid_from date, valid_to date
+TABLE customers: customer_id bigint, full_name text, email text, phone text, created_at timestamp with time zone, status USER-DEFINED
+TABLE gift_cards: gift_card_id bigint, code text, balance numeric, active boolean, created_at timestamp with time zone
+TABLE inventory: warehouse_id bigint, product_id bigint, quantity integer
+TABLE loyalty_accounts: account_id bigint, customer_id bigint, created_at timestamp with time zone
+TABLE loyalty_ledger: ledger_id bigint, account_id bigint, points_delta integer, reason text, created_at timestamp with time zone
+TABLE order_items: order_item_id bigint, order_id bigint, product_id bigint, quantity integer, unit_price numeric, discount numeric
+TABLE orders: order_id bigint, cust
+...
+
+2025-09-06 17:59:20,285 - INFO - Calling EURI to generate SQL...
+2025-09-06 17:59:20,286 - INFO - Calling EURI API...
+2025-09-06 17:59:25,368 - ERROR - EURI API call failed: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+2025-09-06 17:59:25,369 - ERROR - Pipeline failed: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+2025-09-06 18:01:11,935 - INFO - Environment variables loaded.
+2025-09-06 18:01:22,400 - INFO - Creating database engine...
+2025-09-06 18:01:22,402 - INFO - Introspecting database schema...
+2025-09-06 18:01:29,513 - INFO - Schema introspection completed.
+2025-09-06 18:01:29,514 - INFO - Loading prompt template from prompt_template.txt...
+2025-09-06 18:01:29,515 - INFO - Prompt template loaded successfully.
+2025-09-06 18:01:29,516 - INFO - 
+==== Prompt sent to EURI ====
+
+2025-09-06 18:01:29,517 - INFO - You are an advanced SQL assistant with expertise in PostgreSQL. 
+Your task is to translate the following natural language query into a valid and optimized SQL query.
+
+Schema:
+SCHEMA: public
+TABLE abh_test: order_id bigint, order_date date, customer_id bigint, full_name text, paid_amount numeric, paid_at timestamp with time zone, warehouse_id bigint, shipped_at timestamp with time zone, tracking_no text
+TABLE abhra: t1 text, t2 text, t3 text
+TABLE addresses: address_id bigint, customer_id bigint, line1 text, city text, state text, country text, postal_code text, is_default boolean
+TABLE audit_events: event_id bigint, event_type text, entity text, entity_id bigint, created_at timestamp with time zone, payload jsonb
+TABLE cart_items: cart_item_id bigint, cart_id bigint, product_id bigint, quantity integer
+TABLE carts: cart_id bigint, customer_id bigint, created_at timestamp with time zone, updated_at timestamp with time zone
+TABLE categories: category_id bigint, name text, parent_category_id bigint
+TABLE coupon_redemptions: redemption_id bigint, coupon_id bigint, order_id bigint, redeemed_at timestamp with time zone
+TABLE coupons: coupon_id bigint, code text, description text, pct_off numeric, amount_off numeric, active boolean, valid_from date, valid_to date
+TABLE customers: customer_id bigint, full_name text, email text, phone text, created_at timestamp with time zone, status USER-DEFINED
+TABLE gift_cards: gift_card_id bigint, code text, balance numeric, active boolean, created_at timestamp with time zone
+TABLE inventory: warehouse_id bigint, product_id bigint, quantity integer
+TABLE loyalty_accounts: account_id bigint, customer_id bigint, created_at timestamp with time zone
+TABLE loyalty_ledger: ledger_id bigint, account_id bigint, points_delta integer, reason text, created_at timestamp with time zone
+TABLE order_items: order_item_id bigint, order_id bigint, product_id bigint, quantity integer, unit_price numeric, discount numeric
+TABLE orders: order_id bigint, cust
+...
+
+2025-09-06 18:01:29,518 - INFO - Calling EURI to generate SQL...
+2025-09-06 18:01:29,519 - INFO - Calling EURI API...
+2025-09-06 18:01:53,126 - INFO - EURI API call successful.
+2025-09-06 18:01:53,128 - INFO - 
+==== Generated SQL ====
+
+2025-09-06 18:01:53,129 - INFO - SELECT 
+    ci.cart_item_id,
+    ci.cart_id,
+    ci.product_id,
+    ci.quantity,
+    p.sku,
+    p.name AS product_name,
+    p.price,
+    p.discontinued,
+    pi.url AS primary_image_url
+FROM 
+    public.cart_items ci
+LEFT JOIN 
+    public.products p ON ci.product_id = p.product_id
+LEFT JOIN 
+    public.product_images pi ON p.product_id = pi.product_id AND pi.is_primary = TRUE;
+2025-09-06 18:01:53,130 - INFO - Running SQL...
+2025-09-06 18:01:53,131 - INFO - Executing SQL query...
+2025-09-06 18:01:58,133 - INFO - SQL query executed successfully.
+2025-09-06 18:01:58,134 - INFO - Returned 7200 rows × 9 columns.
+2025-09-07 14:39:24,999 - INFO - Environment variables loaded.
+2025-09-07 14:39:46,481 - INFO - Creating database engine...
+2025-09-07 14:39:46,574 - INFO - Introspecting database schema...
+2025-09-07 14:39:53,838 - INFO - Schema introspection completed.
+2025-09-07 14:39:53,838 - INFO - Loading prompt template from prompt_template.txt...
+2025-09-07 14:39:53,838 - INFO - Prompt template loaded successfully.
+2025-09-07 14:39:53,838 - INFO - 
+==== Prompt sent to EURI ====
+
+2025-09-07 14:39:53,838 - INFO - You are an advanced SQL assistant with expertise in PostgreSQL. 
+Your task is to translate the following natural language query into a valid and optimized SQL query.
+
+Schema:
+SCHEMA: public
+TABLE abh_test: order_id bigint, order_date date, customer_id bigint, full_name text, paid_amount numeric, paid_at timestamp with time zone, warehouse_id bigint, shipped_at timestamp with time zone, tracking_no text
+TABLE abhra: t1 text, t2 text, t3 text
+TABLE addresses: address_id bigint, customer_id bigint, line1 text, city text, state text, country text, postal_code text, is_default boolean
+TABLE audit_events: event_id bigint, event_type text, entity text, entity_id bigint, created_at timestamp with time zone, payload jsonb
+TABLE cart_items: cart_item_id bigint, cart_id bigint, product_id bigint, quantity integer
+TABLE carts: cart_id bigint, customer_id bigint, created_at timestamp with time zone, updated_at timestamp with time zone
+TABLE categories: category_id bigint, name text, parent_category_id bigint
+TABLE coupon_redemptions: redemption_id bigint, coupon_id bigint, order_id bigint, redeemed_at timestamp with time zone
+TABLE coupons: coupon_id bigint, code text, description text, pct_off numeric, amount_off numeric, active boolean, valid_from date, valid_to date
+TABLE customers: customer_id bigint, full_name text, email text, phone text, created_at timestamp with time zone, status USER-DEFINED
+TABLE gift_cards: gift_card_id bigint, code text, balance numeric, active boolean, created_at timestamp with time zone
+TABLE inventory: warehouse_id bigint, product_id bigint, quantity integer
+TABLE loyalty_accounts: account_id bigint, customer_id bigint, created_at timestamp with time zone
+TABLE loyalty_ledger: ledger_id bigint, account_id bigint, points_delta integer, reason text, created_at timestamp with time zone
+TABLE order_items: order_item_id bigint, order_id bigint, product_id bigint, quantity integer, unit_price numeric, discount numeric
+TABLE orders: order_id bigint, cust
+...
+
+2025-09-07 14:39:53,838 - INFO - Calling EURI to generate SQL...
+2025-09-07 14:39:53,838 - INFO - Calling EURI API...
+2025-09-07 14:39:56,445 - INFO - EURI API call successful.
+2025-09-07 14:39:56,445 - INFO - 
+==== Generated SQL ====
+
+2025-09-07 14:39:56,445 - INFO - SELECT 
+    ci.cart_item_id,
+    ci.cart_id,
+    ci.product_id,
+    ci.quantity,
+    p.sku,
+    p.name AS product_name,
+    p.price,
+    c.customer_id,
+    c.full_name AS customer_name,
+    c.email,
+    c.phone
+FROM 
+    public.cart_items ci
+JOIN 
+    public.carts c ON ci.cart_id = c.cart_id
+JOIN 
+    public.products p ON ci.product_id = p.product_id;
+2025-09-07 14:39:56,445 - INFO - Running SQL...
+2025-09-07 14:39:56,445 - INFO - Executing SQL query...
+2025-09-07 14:39:57,424 - ERROR - SQL execution failed: (psycopg2.errors.UndefinedColumn) column c.full_name does not exist
+LINE 10:     c.full_name AS customer_name,
+             ^
+
+[SQL: SELECT 
+    ci.cart_item_id,
+    ci.cart_id,
+    ci.product_id,
+    ci.quantity,
+    p.sku,
+    p.name AS product_name,
+    p.price,
+    c.customer_id,
+    c.full_name AS customer_name,
+    c.email,
+    c.phone
+FROM 
+    public.cart_items ci
+JOIN 
+    public.carts c ON ci.cart_id = c.cart_id
+JOIN 
+    public.products p ON ci.product_id = p.product_id;]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-07 14:39:57,425 - ERROR - Pipeline failed: (psycopg2.errors.UndefinedColumn) column c.full_name does not exist
+LINE 10:     c.full_name AS customer_name,
+             ^
+
+[SQL: SELECT 
+    ci.cart_item_id,
+    ci.cart_id,
+    ci.product_id,
+    ci.quantity,
+    p.sku,
+    p.name AS product_name,
+    p.price,
+    c.customer_id,
+    c.full_name AS customer_name,
+    c.email,
+    c.phone
+FROM 
+    public.cart_items ci
+JOIN 
+    public.carts c ON ci.cart_id = c.cart_id
+JOIN 
+    public.products p ON ci.product_id = p.product_id;]
+(Background on this error at: https://sqlalche.me/e/20/f405)
