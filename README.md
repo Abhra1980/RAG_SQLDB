@@ -1,6 +1,6 @@
 # Natural Language to SQL Query Generator
 
-This project enables users to convert natural language questions into SQL queries, execute them on a connected database, and visualize the results. It leverages a large language model (LLM) API to translate user questions into SQL, introspects the database schema for accurate query generation, and supports result visualization.
+This project enables users to convert natural language questions into SQL queries, execute them on a connected database, and visualize the results. It leverages a large language model (LLM) API to translate user questions into SQL, introspects the database schema for accurate query generation
 
 ## Features
 
