@@ -1,0 +1,397 @@
+1) Big picture (domains)
+
+Catalog: categories → products (made by suppliers)
+
+Customers & addresses: customers + one “default” row in addresses
+
+Sales: orders → order_items → payments & shipments
+
+Basket/Marketing: carts, cart_items, coupons, coupon_redemptions
+
+Engagement/Quality: reviews, returns
+
+Loyalty: loyalty_accounts, loyalty_ledger
+
+Ops/Procurement: warehouses, inventory, purchase_orders, purchase_order_items, supplier_payments
+
+Support/Telemetry: support_tickets, ticket_messages, user_sessions, audit_events
+
+Extras: gift_cards
+
+Read models (views): roll-ups like v_sales_daily, v_customer_ltv, etc.
+
+Snapshots (materialized views): mv_order_financials, mv_daily_kpis
+
+2) Seeding order (why it’s in this sequence)
+
+The script drops/recreates everything, then seeds in dependency order so foreign keys always resolve:
+
+Enums (types used by later tables)
+
+Masters: customers, suppliers, categories, products, warehouses
+
+Addresses (depend on customers)
+
+Orders (depend on customers)
+
+Order items (depend on orders & products)
+
+Inventory (warehouse ↔ product)
+
+Payments (1 per order; aggregates order_items)
+
+Shipments (1 per order; connects to warehouses)
+
+Carts / cart_items, reviews, returns, coupons / coupon_redemptions
+
+Loyalty (1 account per customer + many ledger entries)
+
+Gift cards
+
+Procurement: purchase_orders, purchase_order_items, supplier_payments
+
+Attributes & images for products
+
+Support tickets / messages
+
+User sessions and audit events
+
+Views and then materialized views (refreshed last)
+
+3) Core flows (step-by-step)
+A) Customer → Order → Payment → Shipment
+
+Customer exists in customers, with a single default address in addresses.
+
+The partial unique index uq_addresses_default_per_customer enforces max 1 default.
+
+Customer places an order (orders):
+
+customer_id, order_date, status (enum: pending → paid → shipped → delivered, or cancelled).
+
+Order contains one or more order_items (order_items):
+
+For each product: quantity, unit_price, discount.
+
+Revenue per line = quantity * unit_price * (1 - discount/100).
+
+A payment row (payments) summarizes the order:
+
+1:1 with order (unique order_id), method (card/upi/netbanking/cod/wallet), amount.
+
+Seeder computes amount = SUM(line totals); paid_at only for paid/shipped/delivered.
+
+A shipment row (shipments) is created (1:1 with order):
+
+Links to a warehouse_id, includes tracking_no, status timeline (preparing → delivered).
+
+How to inspect
+
+All in one: v_orders_with_payment_shipment merges order + customer + payment + shipment.
+
+Line details: v_order_items_detailed shows arithmetic for each line and line_total.
+
+B) Catalog & Inventory
+
+categories form a tree via parent_category_id.
+
+products belong to exactly one supplier & category; basic price and discontinued flag.
+
+warehouses hold stock; inventory is (warehouse_id, product_id) with a quantity.
+
+How to inspect
+
+Per-warehouse product view: v_products_inventory (joins inventory + products + warehouses).
+
+Category tree: v_category_hierarchy (recursive CTE gives depth & breadcrumb path).
+
+C) Carts, Coupons, Reviews, Returns
+
+carts are snapshots per customer; cart_items holds the contents (unique product per cart).
+
+coupons define either pct_off or amount_off; coupon_redemptions ties a coupon to an order (one redemption per order in this seed).
+
+reviews: customers rate products 1–5 with text.
+
+returns: link back to an order_item_id, with reason and approved.
+
+How to inspect
+
+Discounts usage summary: v_coupon_redemptions.
+
+Product feedback: v_review_summary (review_count, avg_rating).
+
+Quality hotspot: v_returns_rate (items_sold vs items_returned and %).
+
+D) Loyalty & Gift Cards
+
+loyalty_accounts: exactly one per customer (unique FK).
+
+loyalty_ledger: positive “Earn” and negative “Redemption” points_delta; current balance via v_loyalty_balances.
+
+gift_cards: unique codes with balance & active flag (not wired into orders by the seed, but ready for usage).
+
+E) Procurement (Supply-side)
+
+purchase_orders: sent to a supplier, destined for a warehouse.
+
+purchase_order_items: products ordered, quantities, cost_price.
+
+supplier_payments: money out to vendors.
+
+How to inspect
+
+Vendor scorecard: v_supplier_performance (PO count, units, spend).
+
+F) Support, Sessions, Audit
+
+support_tickets (status, priority) + ticket_messages thread (customer/agent alternation in seed).
+
+user_sessions: login sessions with started_at/ended_at.
+
+audit_events: generic event log with JSONB payload.
+
+4) Read models (views) you’ll use most
+
+v_order_items_detailed: itemized lines + computed line_total.
+
+v_orders_with_payment_shipment: order header joined to payment & shipment.
+
+v_sales_daily: per-day orders, units, revenue.
+
+v_top_customers_month: monthly spend per customer.
+
+v_customer_ltv: lifetime value & order counts per customer.
+
+v_supplier_performance: procurement KPIs.
+
+v_returns_rate, v_review_summary, v_warehouse_utilization, v_coupon_redemptions, v_abandoned_carts.
+
+5) Snapshots (materialized views)
+
+mv_order_financials: one row per order with order_total and latest status.
+
+mv_daily_kpis: hydrates v_sales_daily and adds coupon redemption counts.
+Both are created WITH NO DATA and then REFRESH MATERIALIZED VIEW to populate.
+
+6) Why certain constraints/indexes matter
+
+Data quality: enums for statuses, CHECK on prices/discounts, unique keys (emails, SKUs, tracking numbers), partial unique index for one default address/customer.
+
+Joins/perf: indexes on foreign keys (customer_id, supplier_id, category_id, order_id, product_id) and composite PK on inventory.
+
+
+erDiagram
+    %% =======================
+    %% Core Sales Flow
+    %% =======================
+    CUSTOMER ||--o{ ADDRESS : "has"
+    CUSTOMER ||--o{ ORDER : "places"
+    ORDER ||--|{ ORDER_ITEM : "contains"
+    PRODUCT ||--o{ ORDER_ITEM : "appears in"
+    ORDER ||--|| PAYMENT : "settled by"
+    ORDER ||--|| SHIPMENT : "fulfilled by"
+    WAREHOUSE ||--o{ SHIPMENT : "ships from"
+
+    %% =======================
+    %% Catalog & Inventory
+    %% =======================
+    SUPPLIER ||--o{ PRODUCT : "supplies"
+    CATEGORY ||--o{ CATEGORY : "parent of"
+    CATEGORY ||--o{ PRODUCT  : "categorizes"
+    WAREHOUSE ||--|{ INVENTORY : "holds"
+    PRODUCT   ||--|{ INVENTORY : "stocked as"
+
+    %% =======================
+    %% Marketing & CX
+    %% =======================
+    CUSTOMER ||--o{ CART : "has"
+    CART ||--|{ CART_ITEM : "contains"
+    PRODUCT ||--o{ CART_ITEM : "added to"
+    COUPON ||--o{ COUPON_REDEMPTION : "used in"
+    ORDER  ||--o{ COUPON_REDEMPTION : "applies"
+
+    %% =======================
+    %% Engagement & Quality
+    %% =======================
+    CUSTOMER ||--o{ REVIEW : "writes"
+    PRODUCT  ||--o{ REVIEW : "receives"
+    ORDER_ITEM ||--o{ RETURN : "may be returned"
+
+    %% =======================
+    %% Loyalty
+    %% =======================
+    CUSTOMER ||--|| LOYALTY_ACCOUNT : "owns"
+    LOYALTY_ACCOUNT ||--o{ LOYALTY_LEDGER : "entries"
+
+    %% =======================
+    %% Procurement
+    %% =======================
+    SUPPLIER ||--o{ PURCHASE_ORDER : "receives"
+    WAREHOUSE ||--o{ PURCHASE_ORDER : "destined"
+    PURCHASE_ORDER ||--|{ PURCHASE_ORDER_ITEM : "contains"
+    PRODUCT ||--o{ PURCHASE_ORDER_ITEM : "ordered"
+    SUPPLIER ||--o{ SUPPLIER_PAYMENT : "paid via"
+
+    %% =======================
+    %% Support & Telemetry
+    %% =======================
+    CUSTOMER ||--o{ SUPPORT_TICKET : "opens"
+    SUPPORT_TICKET ||--|{ TICKET_MESSAGE : "has"
+    CUSTOMER ||--o{ USER_SESSION : "creates"
+    AUDIT_EVENT }o--|| CUSTOMER : "about (generic)"
+    AUDIT_EVENT }o--|| ORDER    : "about (generic)"
+    AUDIT_EVENT }o--|| PRODUCT  : "about (generic)"
+
+    %% =======================
+    %% Entities with key attrs
+    %% =======================
+    CUSTOMER {
+        bigserial customer_id PK
+        text full_name
+        text email UNIQUE
+        customer_status status
+    }
+    ADDRESS {
+        bigserial address_id PK
+        bigint customer_id FK
+        boolean is_default
+    }
+    SUPPLIER {
+        bigserial supplier_id PK
+        text name UNIQUE
+        int rating
+    }
+    CATEGORY {
+        bigserial category_id PK
+        bigint parent_category_id FK
+        text name UNIQUE
+    }
+    PRODUCT {
+        bigserial product_id PK
+        bigint supplier_id FK
+        bigint category_id FK
+        text sku UNIQUE
+        numeric price
+        boolean discontinued
+    }
+    WAREHOUSE {
+        bigserial warehouse_id PK
+        text name UNIQUE
+    }
+    INVENTORY {
+        bigint warehouse_id PK,FK
+        bigint product_id   PK,FK
+        int quantity
+    }
+    ORDER {
+        bigserial order_id PK
+        bigint customer_id FK
+        date order_date
+        order_status status
+    }
+    ORDER_ITEM {
+        bigserial order_item_id PK
+        bigint order_id  FK
+        bigint product_id FK
+        int quantity
+        numeric unit_price
+        numeric discount
+    }
+    PAYMENT {
+        bigserial payment_id PK
+        bigint order_id UNIQUE,FK
+        payment_method method
+        numeric amount
+    }
+    SHIPMENT {
+        bigserial shipment_id PK
+        bigint order_id UNIQUE,FK
+        bigint warehouse_id FK
+        shipment_status status
+        text tracking_no UNIQUE
+    }
+    CART {
+        bigserial cart_id PK
+        bigint customer_id FK
+    }
+    CART_ITEM {
+        bigserial cart_item_id PK
+        bigint cart_id FK
+        bigint product_id FK
+        int quantity
+    }
+    REVIEW {
+        bigserial review_id PK
+        bigint product_id FK
+        bigint customer_id FK
+        int rating
+    }
+    RETURN {
+        bigserial return_id PK
+        bigint order_item_id FK
+        boolean approved
+    }
+    COUPON {
+        bigserial coupon_id PK
+        text code UNIQUE
+        numeric pct_off
+        numeric amount_off
+    }
+    COUPON_REDEMPTION {
+        bigserial redemption_id PK
+        bigint coupon_id FK
+        bigint order_id UNIQUE,FK
+        timestamptz redeemed_at
+    }
+    LOYALTY_ACCOUNT {
+        bigserial account_id PK
+        bigint customer_id UNIQUE,FK
+    }
+    LOYALTY_LEDGER {
+        bigserial ledger_id PK
+        bigint account_id FK
+        int points_delta
+        text reason
+    }
+    PURCHASE_ORDER {
+        bigserial po_id PK
+        bigint supplier_id FK
+        bigint warehouse_id FK
+        timestamptz created_at
+    }
+    PURCHASE_ORDER_ITEM {
+        bigserial po_item_id PK
+        bigint po_id FK
+        bigint product_id FK
+        int quantity
+        numeric cost_price
+    }
+    SUPPLIER_PAYMENT {
+        bigserial supplier_payment_id PK
+        bigint supplier_id FK
+        numeric amount
+    }
+    SUPPORT_TICKET {
+        bigserial ticket_id PK
+        bigint customer_id FK
+        ticket_status status
+        ticket_priority priority
+    }
+    TICKET_MESSAGE {
+        bigserial message_id PK
+        bigint ticket_id FK
+        text author
+    }
+    USER_SESSION {
+        bigserial session_id PK
+        bigint customer_id FK
+        timestamptz started_at
+        timestamptz ended_at
+    }
+    AUDIT_EVENT {
+        bigserial event_id PK
+        text event_type
+        text entity
+        bigint entity_id
+    }
